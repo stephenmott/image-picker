@@ -1,53 +1,67 @@
-$thumbnail_padding:         6px;
-$thumbnail_margin:          12px;
-$thumbnail_border:          1px solid #DDD;
-$thumbnail_selected_color:  #08C;
-
-ul.thumbnails.image_picker_selector
-{
-  overflow:             auto;
-  list-style-image:     none;
-  list-style-position:  outside;
-  list-style-type:      none;
-  padding:              0px;
-  margin:               0px;
-
-  ul
-  {
-    overflow:             auto;
-    list-style-image:     none;
-    list-style-position:  outside;
-    list-style-type:      none;
-    padding:              0px;
-    margin:               0px;
-  }
-
-  li.group_title
-  {
-    float: none;
-  }
-
-  li
-  {
-    margin:   0px $thumbnail_margin $thumbnail_margin 0px;
-    float:    left;
-
-    .thumbnail
-    {
-      padding:  $thumbnail_padding;
-      border:   $thumbnail_border;
-      -webkit-user-select: none;
-      -moz-user-select:    none;
-      -ms-user-select:     none;
-      img
-      {
-        -webkit-user-drag: none;
-      }
+$thumbnail_padding: 6px;
+$thumbnail_margin: 12px;
+$thumbnail_border: 1px solid #000;
+$thumbnail_selected_color: #252525;
+$thumbnail_disabled_color: #b3b3b3;
+$label_color: darkgray;
+$label_selected_color: white;
+$label_disabled_color: black;
+ul.thumbnails.image_picker_selector {
+    overflow: auto;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    ul {
+        overflow: auto;
+        list-style-image: none;
+        list-style-position: outside;
+        list-style-type: none;
+        padding: 0px;
+        margin: 0px;
     }
-
-    .thumbnail.selected
-    {
-      background: $thumbnail_selected_color;
+    li.group_title {
+        float: none;
     }
-  }
+    li {
+        margin: 0px $thumbnail_margin $thumbnail_margin 0px;
+        float: left;
+        .thumbnail {
+            padding: $thumbnail_padding;
+            border: $thumbnail_border;
+            min-width: 180px;
+            max-width: 200px;
+            min-height: 250px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            img {
+                -webkit-user-drag: none;
+            }
+            color: $label_color;
+            text-align: left;
+            word-wrap: break-word;
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+        .thumbnail.image-label {
+            color: $label_color;
+        }
+        .thumbnail.selected {
+            background: $thumbnail_selected_color;
+            color: $label_selected_color;
+        }
+        .thumbnail.selected.image-label {
+            color: $label_selected_color;
+        }
+        .thumbnail.disabled {
+            background: $thumbnail_disabled_color;
+            cursor: not-allowed;
+            color: $label_disabled_color;
+        }
+        .thumbnail.disabled.image-label {
+            color: $label_disabled_color;
+        }
+    }
 }

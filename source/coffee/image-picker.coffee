@@ -25,7 +25,7 @@ sanitized_options = (opts) ->
   }
   jQuery.extend(default_options, opts)
 
-both_array_are_equal = (a,b) ->
+both_array_are_equal = (a, b) ->
   return false if (!a || !b) || (a.length != b.length)
   a = a[..]
   b = b[..]
@@ -60,7 +60,9 @@ class ImagePicker
 
   sync_picker_with_select: () =>
     for option in @picker_options
-      if option.is_selected()
+      if option.is_disabled()
+        option.mark_as_disabled()
+      else if option.is_selected()
         option.mark_as_selected()
       else
         option.unmark_as_selected()
@@ -129,20 +131,37 @@ class ImagePickerOption
   has_image: () ->
     @option.data("img-src")?
 
+  is_disabled: () ->
+    @option.prop('disabled') == true
+
   is_blank: () ->
     !(@value()? && @value() != "")
 
   is_selected: () ->
-    select_value = @picker.select.val()
+    select_value = null
+    selected_index = @picker.select.prop('selectedIndex')
+    if selected_index >= 0
+      select_value = @picker.picker_options[selected_index].value()
+    else
+      select_value = @picker.select.val()
     if @picker.multiple
       jQuery.inArray(@value(), select_value) >= 0
     else
       @value() == select_value
 
+  mark_as_disabled: () ->
+    @node.find(".thumbnail").removeClass("selected")
+    @node.find(".thumbnail").addClass("disabled")
+    @node.find(".image-label").addClass("disabled-image")
+
   mark_as_selected: () ->
+    @node.find(".thumbnail").removeClass("disabled")
+    @node.find(".image-label").removeClass("disabled-image")
     @node.find(".thumbnail").addClass("selected")
 
   unmark_as_selected: () ->
+    @node.find(".thumbnail").removeClass("disabled")
+    @node.find(".image-label").removeClass("disabled-image")
     @node.find(".thumbnail").removeClass("selected")
 
   value: () ->
@@ -172,15 +191,15 @@ class ImagePickerOption
     # Add custom class
     imgClass = @option.data("img-class")
     if imgClass
-      @node.addClass(imgClass)
+      #@node.addClass(imgClass)
       image.addClass(imgClass)
-      thumbnail.addClass(imgClass)
+      #thumbnail.addClass(imgClass)
     # Add image alt
     imgAlt = @option.data("img-alt")
     if imgAlt
-      image.attr('alt', imgAlt);
-    thumbnail.on("click", @clicked)  
+      image.attr('alt', imgAlt)
+    thumbnail.on("click", @clicked)
     thumbnail.append(image)
-    thumbnail.append(jQuery("<p/>").html(@label())) if @opts.show_label
+    thumbnail.append(jQuery("<p class='image-label'/>").html(@label())) if @opts.show_label
     @node.append( thumbnail )
     @node
